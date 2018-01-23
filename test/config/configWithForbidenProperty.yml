@@ -1,0 +1,6 @@
+%YAML 1.2
+---
+imports:
+  - resource: configBasic.yml
+
+envParameters: {}

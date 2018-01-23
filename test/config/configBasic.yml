@@ -1,0 +1,25 @@
+%YAML 1.2
+---
+parameters:
+  TMP_PATH: /path/to/tmp
+
+app:
+  baseUrl: https://myapp.com
+  rootPath: /home/app
+  stackTraceLimit: 10
+
+
+security:
+  jwt:
+    key: aFalseKey
+  ldap:
+    url: https://ldapUrl
+    pass: secretPass
+
+elastic:
+  clients:
+    main:
+      log:
+        - error
+        - trace
+        - debug

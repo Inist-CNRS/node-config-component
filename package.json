@@ -1,0 +1,38 @@
+{
+  "name": "config-component",
+  "version": "1.0.0",
+  "description": "YAML config component for nodeJs",
+  "main": "configComponent.js",
+  "scripts": {
+    "test": "export NODE_ENV='test'; mocha"
+  },
+  "bin": {
+    "view-config": "./bin/view-config.js",
+    "install-config": "./bin/install-config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Inist-CNRS/node-config-component.git"
+  },
+  "keywords": [
+    "nodejs",
+    "yaml",
+    "config",
+    "javascript"
+  ],
+  "author": "jj618",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Inist-CNRS/node-config-component/issues"
+  },
+  "homepage": "https://github.com/Inist-CNRS/node-config-component#readme",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^4.1.0",
+    "rewire": "^3.0.2",
+    "should": "^13.2.1"
+  }
+}

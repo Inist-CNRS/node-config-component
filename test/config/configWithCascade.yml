@@ -1,0 +1,12 @@
+%YAML 1.2
+---
+imports:
+  - resource: configBasic.yml
+
+parameters:
+  LOG_PATH: /path/to/log
+
+app:
+  rootPath: /home/bob/app
+  stackTraceLimit: 50
+

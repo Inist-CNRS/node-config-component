@@ -1,0 +1,14 @@
+%YAML 1.2
+---
+
+DEFAULT_CONFIG: config.yml
+DEFAULT_PARAMETERS: parameters.yml
+DEFAULT_PATH: ./config
+
+envNameMapping:
+  dev:
+    - dev
+    - development
+  prod:
+    - prod
+    - production
