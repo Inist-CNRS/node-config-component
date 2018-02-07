@@ -28,5 +28,5 @@ configComponent.loadSync = _.memoize(loadSync);
 
 
 function get () {
-  return _.omit(this.loadSync(utils.getPath()), ['parameters', 'envParameters']);
+  return _.omit(this.loadSync(utils.getPath()), ['parameters', 'env']);
 }

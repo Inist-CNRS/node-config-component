@@ -17,7 +17,7 @@ const basicConfig = {
     ldap: {url: 'https://ldapUrl', pass: 'secretPass'}
   },
   elastic      : {clients: {main: {log: ['error', 'trace', 'debug']}}},
-  envParameters: {},
+  env: {},
   parameters   : {'TMP_PATH': '/path/to/tmp'}
 };
 
@@ -69,7 +69,7 @@ describe('loadSync([file = defaultPath])', () => {
     should.throws(() => {loadSync(path.join(__dirname, '/config/configWithParametersException.yml'));});
   });
 
-  it('Should throw if "envParameters" property is set', () => {
+  it('Should throw if "env" property is set', () => {
     should.throws(() => {loadSync(path.join(__dirname, '/config/configWithForbidenProperty.yml'));});
   });
 });

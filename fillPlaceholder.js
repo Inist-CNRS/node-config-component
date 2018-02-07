@@ -11,9 +11,9 @@ module.exports = fillPlaceholder;
 
 function fillPlaceholder (config) {
 
-  const envParameters = {};
+  const env = {};
   config = placeholderIterator(config);
-  config.envParameters = envParameters;
+  config.env = env;
 
   return config;
 
@@ -50,7 +50,7 @@ function fillPlaceholder (config) {
 
 
   function resolveParameter (parameterName, key) {
-    // Use config, envParameters
+    // Use config, env
     let
       envMatch,
       parameters = config.parameters
@@ -73,12 +73,12 @@ function fillPlaceholder (config) {
 
     if (envMatch && process.env.hasOwnProperty(parameterName)) {
       let resolvedEnvParameter = resolveEnvParameter(parameterName);
-      envParameters[parameterName] = resolvedEnvParameter;
+      env[parameterName] = resolvedEnvParameter;
 
       return resolvedEnvParameter;
     }
 
-    if (envMatch) envParameters[parameterName] = 'UNSET';
+    if (envMatch) env[parameterName] = 'UNSET';
 
     return parameters[parameterName];
   }

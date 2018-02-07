@@ -13,7 +13,7 @@ module.exports = checkParameters;
 
 // Check if parameters and dist parameters are keys iso
 function checkParameters () {
-  const parametersPath     = path.join(moduleConfig.DEFAULT_PATH, moduleConfig.DEFAULT_PARAMETERS),
+  const parametersPath     = path.join(moduleConfig.DEFAULT_PATH, moduleConfig.SECRET_PARAMETERS_FILE),
         distParametersPath = parametersPath + '.dist'
   ;
 
@@ -44,7 +44,7 @@ function checkParameters () {
 }
 
 function distParametersException (diff) {
-  let err = new Error(`${moduleConfig.DEFAULT_PARAMETERS} and  ${moduleConfig.DEFAULT_PARAMETERS}.dist must have the exact same keys, mismatch on: ${diff.join(
+  let err = new Error(`${moduleConfig.SECRET_PARAMETERS_FILE} and  ${moduleConfig.SECRET_PARAMETERS_FILE}.dist must have the exact same keys, mismatch on: ${diff.join(
     ', ')}`);
 
   err.name = 'distParametersException';

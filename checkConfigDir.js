@@ -7,7 +7,7 @@ const
 ;
 
 const
-  configPath    = path.join(moduleConfig.DEFAULT_PATH, moduleConfig.DEFAULT_CONFIG),
+  configPath    = path.join(moduleConfig.DEFAULT_PATH, moduleConfig.CONFIG_FILE),
   gitIgnorePath = path.join(moduleConfig.DEFAULT_PATH, '.gitignore')
 ;
 
@@ -19,6 +19,6 @@ function checkConfigDir () {
     fs.appendFileSync(configPath, '%YAML 1.2\n---\n');
   }
   if (!fs.existsSync(gitIgnorePath)) {
-    fs.appendFileSync(gitIgnorePath, moduleConfig.DEFAULT_PARAMETERS);
+    fs.appendFileSync(gitIgnorePath, moduleConfig.SECRET_PARAMETERS_FILE);
   }
 }

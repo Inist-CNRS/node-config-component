@@ -3,4 +3,4 @@
 imports:
   - resource: configBasic.yml
 
-envParameters: {}
+env: {}

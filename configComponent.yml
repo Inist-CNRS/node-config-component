@@ -1,14 +1,6 @@
 %YAML 1.2
 ---
 
-DEFAULT_CONFIG: config.yml
-DEFAULT_PARAMETERS: parameters.yml
+CONFIG_FILE: config.yml
+SECRET_PARAMETERS_FILE: secret_parameters.yml
 DEFAULT_PATH: ./config
-
-envNameMapping:
-  dev:
-    - dev
-    - development
-  prod:
-    - prod
-    - production

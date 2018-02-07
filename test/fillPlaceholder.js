@@ -45,7 +45,7 @@ const expected = {
           LOG_LEVELS        : ['debug', 'stack', 'error'],
           LOG_NAME          : 'debug'
         },
-        envParameters: {}
+        env: {}
       }
 ;
 
@@ -91,7 +91,7 @@ const expectedWithEnv = {
     LOG_LEVELS        : ['debug', 'stack', 'error'],
     LOG_NAME          : 'debug'
   },
-  envParameters: {
+  env: {
     HOME_PATH         : 'home/path/from/env',
     STACK_TRACE_LIMITE: 2,
     LOG_LEVELS        : ['stack', 'info'],
@@ -120,7 +120,7 @@ describe('fillPlaceholder(plainObject)', () => {
 
      });
 
-  it('Should fill "sprintf" placeholder and replacement placeholder with "envParameters" or fallback to "parameters"',
+  it('Should fill "sprintf" placeholder and replacement placeholder with "env" or fallback to "parameters"',
      () => {
 
        _.assign(process.env, {

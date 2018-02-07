@@ -37,8 +37,8 @@ function loadSync (file = utils.defaultPath) {
     if (json.hasOwnProperty('parameters') && !_.isPlainObject(json.parameters)) {
       throw typeException(json.parameters);
     }
-    if (json.hasOwnProperty('envParameters')) {
-      throw forbidenPropertyException('envParameters');
+    if (json.hasOwnProperty('env')) {
+      throw forbidenPropertyException('env');
     }
 
     if (!json.imports) {
