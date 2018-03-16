@@ -2,7 +2,7 @@
   "name": "config-component",
   "version": "1.0.0",
   "description": "YAML config component for nodeJs",
-  "main": "configComponent.js",
+  "main": "index.js",
   "scripts": {
     "test": "export NODE_ENV='test'; mocha"
   },

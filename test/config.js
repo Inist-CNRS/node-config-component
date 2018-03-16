@@ -1,7 +1,7 @@
 'use strict';
 
 const
-  configComponent = require('../configComponent.js'),
+  configComponent = require('../index.js'),
   should          = require('should'), // jshint ignore:line
   _               = require('lodash')
 ;

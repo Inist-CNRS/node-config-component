@@ -27,6 +27,6 @@ configComponent.view = view;
 configComponent.loadSync = _.memoize(loadSync);
 
 
-function get () {
-  return _.omit(this.loadSync(utils.getPath()), ['parameters', 'env']);
+function get (_module) {
+  return _.omit(configComponent.loadSync(utils.getPath(_module.filename)), ['parameters', 'env']);
 }
