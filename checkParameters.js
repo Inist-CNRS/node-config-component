@@ -12,10 +12,10 @@ module.exports = checkParameters;
 
 
 // Check if parameters and dist parameters are keys iso
-function checkParameters () {
-  const parametersPath     = path.join(moduleConfig.DEFAULT_PATH, moduleConfig.SECRET_PARAMETERS_FILE),
-        distParametersPath = parametersPath + '.dist'
-  ;
+function checkParameters (parametersPath) {
+  parametersPath = parametersPath || path.join(moduleConfig.DEFAULT_PATH, moduleConfig.SECRET_PARAMETERS_FILE);
+  const distParametersPath = parametersPath + '.dist';
+
 
   let distParameters,
       parameters

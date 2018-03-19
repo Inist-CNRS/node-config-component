@@ -1,7 +1,6 @@
 'use strict';
 const path         = require('path'),
       fs           = require('fs'),
-      _            = require('lodash'),
       moduleConfig = require('./getModuleConfig.js')()
 ;
 
@@ -12,8 +11,9 @@ module.exports = utils;
 utils.isNodeEnvSet = isNodeEnvSet;
 utils.getEnv = getEnv;
 utils.basename = basename;
-utils.getPath = getPath;
-utils.defaultPath = path.join(moduleConfig.DEFAULT_PATH, moduleConfig.CONFIG_FILE);
+utils.getEnvPathFrom = getEnvPathFrom;
+utils.getDefaultPathFrom = getDefaultPathFrom;
+utils.defaultPath = path.join(moduleConfig.DEFAULT_PATH, 'config.yml');
 utils.resolve = resolve;
 
 function isNodeEnvSet () {
@@ -21,7 +21,7 @@ function isNodeEnvSet () {
 }
 
 function basename () {
-  if (!isNodeEnvSet()) return moduleConfig.CONFIG_FILE;
+  if (!isNodeEnvSet()) return 'config.yml';
 
   return `config_${getEnv()}.yml`;
 }
@@ -30,12 +30,23 @@ function getEnv () {
   return process.env.NODE_ENV;
 }
 
-function getPath (fromFilePath) {
+function getDefaultPathFrom (fromFilePath) {
+  const configDir = fromFilePath ? resolve(fromFilePath) : moduleConfig.DEFAULT_PATH;
+
+  return path.join(configDir, 'config.yml');
+}
+
+function getEnvPathFrom (fromFilePath) {
   const configDir = fromFilePath ? resolve(fromFilePath) : moduleConfig.DEFAULT_PATH;
 
   return path.join(configDir, basename());
 }
 
+/**
+ * Resolve config directory path
+ * @param fromFilePath
+ * @returns String path
+ */
 function resolve (fromFilePath) {
   const packageDir = _resolve(path.dirname(fromFilePath)),
         configDir  = path.join(packageDir, 'config')
@@ -56,7 +67,7 @@ function resolve (fromFilePath) {
     if (fs.existsSync(path.join(dirPath, 'package.json'))) {
       return dirPath;
     }
-    if (dirPath === '/' || _resolve.i === 16) throw configDirNotFoundException(fromFilePath);
+    if (dirPath === '/' || _resolve.i === 16) throw packageNotFoundException(fromFilePath);
     ++_resolve.i;
     return _resolve(path.dirname(dirPath));
   }
