@@ -1,0 +1,5 @@
+%YAML 1.2
+---
+imports:
+  - resource: configBasic # Must import configBasic.yml
+  - resource: configBasic.json # Must import json file

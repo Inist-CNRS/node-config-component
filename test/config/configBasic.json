@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "ROOT_PATH": "/path/to/root",
+    "TMP_PATH": "/path/to/json/tmp"
+  },
+  "app": {
+    "baseUrl": "https://myapp.com",
+    "rootPath": "%ROOT_PATH%",
+    "stackTraceLimit": 30
+  }
+}

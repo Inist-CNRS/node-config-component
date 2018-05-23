@@ -7,6 +7,7 @@ const
 ;
 const basicConfig = {
   app     : {
+    name           : 'myApp',
     baseUrl        : 'https://myapp.com',
     rootPath       : '/home/app',
     stackTraceLimit: 10

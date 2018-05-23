@@ -4,6 +4,7 @@ parameters:
   TMP_PATH: /path/to/tmp
 
 app:
+  name: myApp
   baseUrl: https://myapp.com
   rootPath: /home/app
   stackTraceLimit: 10

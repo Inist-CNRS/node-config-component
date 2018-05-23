@@ -7,18 +7,19 @@ const loadSync = require('../loadSync.js'),
 ;
 
 const basicConfig = {
-  app          : {
+  app       : {
+    name           : 'myApp',
     baseUrl        : 'https://myapp.com',
     rootPath       : '/home/app',
     stackTraceLimit: 10
   },
-  security     : {
+  security  : {
     jwt : {key: 'aFalseKey'},
     ldap: {url: 'https://ldapUrl', pass: 'secretPass'}
   },
-  elastic      : {clients: {main: {log: ['error', 'trace', 'debug']}}},
-  env: {},
-  parameters   : {'TMP_PATH': '/path/to/tmp'}
+  elastic   : {clients: {main: {log: ['error', 'trace', 'debug']}}},
+  env       : {},
+  parameters: {'TMP_PATH': '/path/to/tmp'}
 };
 
 describe('loadSync([file = defaultPath])', () => {
@@ -57,6 +58,31 @@ describe('loadSync([file = defaultPath])', () => {
     expectedConfig.parameters.LOG_PATH = '/path/to/log'; // Cascade
     expectedConfig.app.rootPath = '/home/bob/app'; // Cascade
     expectedConfig.app.stackTraceLimit = 50; // Cascade
+
+    config.should.deepEqual(expectedConfig);
+  });
+
+  it('Should resolve Json and file with no extname relative imports', () => {
+    const config         = loadSync(path.join(__dirname, '/config/configWithRelativeJsonImports.yml')),
+          expectedConfig = _.cloneDeep(basicConfig)
+    ;
+
+    expectedConfig.parameters.ROOT_PATH = expectedConfig.app.rootPath = '/path/to/root'; // Cascade
+    expectedConfig.parameters.TMP_PATH = '/path/to/json/tmp'; // Cascade
+    expectedConfig.app.stackTraceLimit = 30; // Cascade
+
+    config.should.deepEqual(expectedConfig);
+  });
+
+  it('Should resolve cherry picking imports', () => {
+    const config         = loadSync(path.join(__dirname, '/config/configWithKeyRelativeJsonImports.yml')),
+          expectedConfig = _.cloneDeep(basicConfig)
+    ;
+
+    expectedConfig.app.name = 'config-component';
+    expectedConfig.app.version = '1.0.0';
+    expectedConfig.repository = {type: 'git'};
+    expectedConfig.parameters.license = 'MIT';
 
     config.should.deepEqual(expectedConfig);
   });
