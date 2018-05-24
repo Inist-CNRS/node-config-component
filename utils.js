@@ -51,7 +51,7 @@ function resolve (fromFilePath) {
   const fileStat = fs.statSync(fromFilePath);
   fromFilePath = fileStat.isFile() ? path.dirname(fromFilePath) : fromFilePath;
   
-  const packageDir = _resolve(path.dirname(fromFilePath)),
+  const packageDir = _resolve(fromFilePath),
         configDir  = path.join(packageDir, 'config')
   ;
 
