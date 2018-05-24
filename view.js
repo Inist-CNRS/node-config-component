@@ -25,7 +25,7 @@ const
 module.exports = view;
 
 function view () {
-  const json = loadSync(utils.getEnvPathFrom());
+  const json = loadSync(utils.getEnvPathFrom(process.cwd()));
 
   _.defaults(json, {env: {}, parameters: {}});
 
