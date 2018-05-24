@@ -48,6 +48,9 @@ function getEnvPathFrom (fromFilePath) {
  * @returns String path
  */
 function resolve (fromFilePath) {
+  const fileStat = fs.statSync(fromFilePath);
+  fromFilePath = fileStat.isFile() ? path.dirname(fromFilePath) : fromFilePath;
+  
   const packageDir = _resolve(path.dirname(fromFilePath)),
         configDir  = path.join(packageDir, 'config')
   ;
