@@ -4,9 +4,9 @@ imports:
   - resource: configBasic
   - resource: ../../package.json
     pick:
-      - [name, app.name]
-      - [version , app.version]
-      - [app.baseUrl]
-      - repository.type
-      - foo
-      - [license, parameters.license]
+      name: app.name
+      version: app.version
+      app.baseUrl:
+      repository.type:
+      foo:
+      license: parameters.license

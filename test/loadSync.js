@@ -78,7 +78,7 @@ describe('loadSync([file = defaultPath])', () => {
     const config         = loadSync(path.join(__dirname, '/config/configWithKeyRelativeJsonImports.yml')),
           expectedConfig = _.cloneDeep(basicConfig)
     ;
-
+console.dir(config)
     expectedConfig.app.name = 'config-component';
     expectedConfig.app.version = '1.0.0';
     expectedConfig.repository = {type: 'git'};

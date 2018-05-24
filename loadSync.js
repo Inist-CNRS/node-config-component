@@ -67,13 +67,12 @@ function loadSync (file = utils.defaultPath) {
         if (!_.has(jsonImport, 'pick')) return resolvedYamlImport;
 
         return _.chain(jsonImport)
-                .get('pick', [])
-                .transform((accu, value) => {
-                             if (!Array.isArray(value)) {value = [value];}
-                             const get = _.get(resolvedYamlImport, value[0], null);
-                             const set = value[1] || value[0]; // if no destination is set we use the get key
-
-                             if (_.isNil(get)) return; // nil values are silently ignored
+                .get('pick', {})
+                .transform((accu, destinationPath, sourcePath) => {
+                             if (!_.has(resolvedYamlImport, sourcePath)) return;
+                             if (_.isNil(destinationPath)) {destinationPath = sourcePath;}
+                             const get = _.get(resolvedYamlImport, sourcePath);
+                             const set = destinationPath;
 
                              _.set(accu, set, get);
                            },
@@ -135,6 +134,6 @@ function forbidenPropertyException (property) {
 }
 
 
-function _toType(obj) {
+function _toType (obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
 }
