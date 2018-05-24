@@ -78,7 +78,7 @@ describe('loadSync([file = defaultPath])', () => {
     const config         = loadSync(path.join(__dirname, '/config/configWithKeyRelativeJsonImports.yml')),
           expectedConfig = _.cloneDeep(basicConfig)
     ;
-console.dir(config)
+
     expectedConfig.app.name = 'config-component';
     expectedConfig.app.version = '1.0.0';
     expectedConfig.repository = {type: 'git'};
@@ -87,6 +87,18 @@ console.dir(config)
     config.should.deepEqual(expectedConfig);
   });
 
+  describe('[file = *.js]', () => {
+    it('Should import js module that exports litteral Object', () => {
+      const config         = loadSync(path.join(__dirname, '/config/configWithJsImports.yml')),
+            expectedConfig = _.cloneDeep(basicConfig)
+      ;
+      expectedConfig.modele = {indice: 'records'};
+      expectedConfig.parameters.ROOT = '/root';
+
+      config.should.deepEqual(expectedConfig);
+    });
+
+  });
   it('Should throw on circular imports', () => {
     should.throws(() => {loadSync(path.join(__dirname, '/config/configWithCircularImports.yml'));});
   });

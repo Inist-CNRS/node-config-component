@@ -24,7 +24,7 @@ function loadSync (file = utils.defaultPath) {
   config = fillPlaceholder(config || {});
 
   if (config.hasOwnProperty('parameters') && !_.isPlainObject(config.parameters)) {
-    throw typeException(config.parameters);
+    throw typeException('parameters', 'plain Object', config.parameters);
   }
 
   return config;
@@ -37,10 +37,14 @@ function loadSync (file = utils.defaultPath) {
     json = _import(yamlFile) || {};
     resolvedImports.push(yamlFile);
 
+    if(!_.isPlainObject(json)){
+      throw typeException('Imported file '+ yamlFile, 'plain Object', json);
+    }
 
     if (json.hasOwnProperty('parameters') && !_.isPlainObject(json.parameters)) {
-      throw typeException(json.parameters);
+      throw typeException('parameters', 'plain Object', json.parameters);
     }
+
     if (json.hasOwnProperty('env')) {
       throw forbidenPropertyException('env');
     }
@@ -99,7 +103,9 @@ function _import (file) {
   // How do we handle file by type
   const mapping = {
     '.json': fs.readJsonSync,
-    '.yml' : yaml.load.bind(yaml)
+    '.yml' : yaml.load.bind(yaml),
+    '.js' : require,
+    '.node': require
   };
 
   const func = _.get(mapping, path.extname(file), mapping['.yml']);
@@ -121,8 +127,8 @@ function importCircularReferenceException (importedYamlFile, yamlFile) {
   return err;
 }
 
-function typeException (parameters) {
-  let err = new Error(`parameters must be a litteral object, it is presently: ${_toType(parameters)} => ${parameters}`);
+function typeException (name, expectedType, value) {
+  let err = new Error(`${name} must be a ${expectedType}, it is presently: ${_toType(value)} => ${value}`);
   err.name = 'typeException';
   return err;
 }
