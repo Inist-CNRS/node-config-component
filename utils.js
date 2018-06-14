@@ -1,7 +1,6 @@
 'use strict';
 const path         = require('path'),
-      fs           = require('fs'),
-      moduleConfig = require('./getModuleConfig.js')()
+      fs           = require('fs')
 ;
 
 const utils = {};
@@ -12,8 +11,7 @@ utils.isNodeEnvSet = isNodeEnvSet;
 utils.getEnv = getEnv;
 utils.basename = basename;
 utils.getEnvPathFrom = getEnvPathFrom;
-utils.getDefaultPathFrom = getDefaultPathFrom;
-utils.defaultPath = path.join(moduleConfig.DEFAULT_PATH, 'config.yml');
+utils.getProductionPathFrom = getProductionPathFrom;
 utils.resolve = resolve;
 
 function isNodeEnvSet () {
@@ -21,25 +19,21 @@ function isNodeEnvSet () {
 }
 
 function basename () {
-  if (!isNodeEnvSet()) return 'config.yml';
-
   return `config_${getEnv()}.yml`;
 }
 
 function getEnv () {
+  if (!isNodeEnvSet()) return 'production';
+
   return process.env.NODE_ENV;
 }
 
-function getDefaultPathFrom (fromFilePath) {
-  const configDir = fromFilePath ? resolve(fromFilePath) : moduleConfig.DEFAULT_PATH;
-
-  return path.join(configDir, 'config.yml');
+function getProductionPathFrom (fromFilePath) {
+  return path.join(resolve(fromFilePath), 'config_production.yml');
 }
 
 function getEnvPathFrom (fromFilePath) {
-  const configDir = fromFilePath ? resolve(fromFilePath) : moduleConfig.DEFAULT_PATH;
-
-  return path.join(configDir, basename());
+  return path.join(resolve(fromFilePath), basename());
 }
 
 /**

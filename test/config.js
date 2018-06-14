@@ -19,9 +19,14 @@ const basicConfig = {
   elastic : {clients: {main: {log: ['error', 'trace', 'debug']}}}
 };
 
-describe('config#get()', () => {
-  it('Should return "config_test" based on env variable "NODE_ENV"', () => {
-    const config = configComponent.get();
-    config.should.deepEqual(_.clone(basicConfig));
+describe('config#get(moduleOrPath)', () => {
+  it('Should return "config_test" based on env variable "NODE_ENV" and arg === module', () => {
+    const config = configComponent.get(module);
+    const expectedConfig = _.clone(basicConfig);
+    expectedConfig.testConfig = true;
+
+    config.should.deepEqual(expectedConfig);
   });
 });
+
+

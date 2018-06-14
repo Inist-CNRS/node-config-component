@@ -1,6 +1,5 @@
 %YAML 1.2
 ---
 
-CONFIG_FILE: config.yml
 SECRET_PARAMETERS_FILE: secret_parameters.yml
 DEFAULT_PATH: ./config

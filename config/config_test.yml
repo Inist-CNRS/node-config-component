@@ -3,3 +3,5 @@
 
 imports:
   - resource: ../test/config/configBasic.yml
+
+testConfig: true

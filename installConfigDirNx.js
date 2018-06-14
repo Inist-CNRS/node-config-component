@@ -13,8 +13,8 @@ module.exports = installConfigDirNx;
  * Install config/config.yml and config/.gitignore if not exists.
  * @param configDir
  */
-function installConfigDirNx (configDir = './config') {
-  const configPath    = path.join(configDir, 'config.yml'),
+function installConfigDirNx (configDir = moduleConfig.DEFAULT_PATH) {
+  const configPath    = path.join(configDir, 'config_production.yml'),
         gitIgnorePath = path.join(configDir, '.gitignore')
   ;
   if (!fs.pathExistsSync(configPath)) {

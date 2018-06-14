@@ -3,7 +3,6 @@
 const
   yaml  = require('yamljs'),
   _     = require('lodash'),
-  utils = require('./utils'),
   path  = require('path'),
   fs    = require('fs-extra')
 ;
@@ -13,12 +12,10 @@ const fillPlaceholder = require('./fillPlaceholder')
 
 module.exports = loadSync;
 
-function loadSync (file = utils.defaultPath) {
-  let config;
+function loadSync (file) {
 
-  const
-    resolvedImports = []
-  ;
+  let config;
+  const resolvedImports = [];
 
   config = resolveYamlImportSync(file);
   config = fillPlaceholder(config || {});

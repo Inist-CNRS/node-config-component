@@ -5,11 +5,11 @@
 const _ = require('lodash');
 
 const
-  loadSync        = require('./loadSync'),
-  utils           = require('./utils'),
-  checkParameters = require('./checkParameters'),
-  view            = require('./view'),
-  path            = require('path')
+  loadSync              = require('./loadSync'),
+  utils                 = require('./utils'),
+  checkSecretParameters = _.memoize(require('./checkSecretParameters')),
+  view                  = require('./view'),
+  path                  = require('path')
 ;
 
 
@@ -18,6 +18,9 @@ const configComponent = module.exports;
 // get Config dynamically depending on NODE_ENV
 configComponent.get = get;
 
+// Same as get but return config metadata too
+configComponent._getFullConfig = _getFullConfig;
+
 // View prettyfied config depending on NODE_ENV
 configComponent.view = view;
 
@@ -25,18 +28,37 @@ configComponent.view = view;
 configComponent.loadSync = _.memoize(loadSync);
 
 
-function get (_module) {
-  let config;
-  checkParameters(path.join(utils.resolve(_module.filename), 'secret_parameters.yml'));
+function get (module) {
+  return _.omit(configComponent._getFullConfig(module), ['parameters', 'env', 'fileEnv', 'filePath']);
+}
+
+function _getFullConfig (module) {
+
+  let config, filePath, fileEnv;
+  const secretParamsPath = path.join(utils.resolve(module.filename), 'secret_parameters.yml');
+
+  if (!checkSecretParameters.cache.has(secretParamsPath)) {
+    checkSecretParameters(secretParamsPath);
+  }
+
   try {
-    config = configComponent.loadSync(utils.getEnvPathFrom(_module.filename));
+    filePath = utils.getEnvPathFrom(module.filename);
+    fileEnv = utils.getEnv();
+    config = configComponent.loadSync(filePath);
   } catch (err) {
-    if (err.code !== 'ENOENT') {
+
+    if (err.code !== 'ENOENT' || fileEnv === 'production') {
+      // Unexpected Error or production config not found.
       throw err;
     }
-    config = configComponent.loadSync(utils.getDefaultPathFrom(_module.filename));
-    console.warn('ConfigComponent: No config found for NODE_ENV=' + utils.getEnv() + ' fallback on config.yml');
 
+    filePath = utils.getProductionPathFrom(module.filename);
+    fileEnv = 'production';
+    config = configComponent.loadSync(filePath);
+    console.warn('ConfigComponent: No config found for NODE_ENV=' + process.env.NODE_ENV + ' fallback on config_production.yml');
   }
-  return _.omit(config, ['parameters', 'env']);
+  config.filePath = filePath;
+  config.fileEnv = fileEnv;
+
+  return config;
 }

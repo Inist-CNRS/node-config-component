@@ -1,15 +1,14 @@
 'use strict';
 
-const yaml           = require('yamljs'),
-      _              = require('lodash'),
-      styleComponent = require('./style'),
-      envStyle       = styleComponent.envStyle,
-      indent         = styleComponent.indent
+const yaml = require('yamljs'),
+      _    = require('lodash'),
+      path = require('path')
 ;
 
 const
-  utils    = require('./utils'),
-  loadSync = require('./loadSync')
+  {envStyle, indent} = require('./style'),
+  configComponent    = require('./configComponent'),
+  utils              = require('./utils')
 ;
 
 
@@ -25,14 +24,29 @@ const
 module.exports = view;
 
 function view () {
-  const json = loadSync(utils.getEnvPathFrom(process.cwd()));
+  const json = configComponent._getFullConfig({filename: process.cwd()});
 
   _.defaults(json, {env: {}, parameters: {}});
 
-  const config     = _.omit(json, ['env', 'parameters']),
+  const config     = _.omit(json, ['env', 'parameters', 'filePath', 'fileEnv']),
         parameters = _.pick(json, ['parameters']),
         env        = _.pick(json, ['env'])
   ;
+
+  _.mixin({
+            'sortKeysBy': function(obj, comparator) {
+              let keys = _.sortBy(_.keys(obj), (key) => {
+                return comparator ? comparator(obj[key], key) : key;
+              });
+
+              return _.zipObject(keys, _.map(keys, (key) => {
+                return obj[key];
+              }));
+            }
+          });
+
+  env.env = _.sortKeysBy(env.env);
+  parameters.parameters = _.sortKeysBy(parameters.parameters);
 
   let
     yamlConfig     = yaml.dump(config, 4, 4),
@@ -41,14 +55,14 @@ function view () {
   ;
 
   console.info('\n' + envStyle(`Config component:`, 232, {bold: true, bgColor: yellow}));
-  console.info(`\n${envStyle('File', violet, {bold: true})}: ${utils.basename()}`);
+  console.info(`\n${envStyle('File', violet, {bold: true})}: ${json.filePath}`);
   console.info(`\n${envStyle('Env',
                              violet,
-                             {bold: true})}: ${utils.isNodeEnvSet() ? process.env.NODE_ENV : 'UNSET'}\n`);
+                             {bold: true})}: ${utils.isNodeEnvSet() ? json.fileEnv : 'UNSET => default to production'}\n`);
   console.info(prettify(yamlEnv));
   console.info(prettify(yamlParameters));
   console.info(envStyle('---', yellow));
-  console.info(envStyle(`config:`, yellow, {bold: true}) + envStyle(`(${utils.basename()})`,
+  console.info(envStyle(`config:`, yellow, {bold: true}) + envStyle(`(${path.basename(json.filePath)})`,
                                                                     violet,
                                                                     {bold: true}));
   console.info(indent(_.isEmpty(config) ? 'Empty configuration' : prettify(yamlConfig), 4));

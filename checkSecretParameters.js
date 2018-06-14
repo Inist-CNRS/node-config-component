@@ -3,19 +3,17 @@
 const
   _            = require('lodash'),
   fs           = require('fs-extra'),
-  path         = require('path'),
   yaml         = require('yamljs'),
   moduleConfig = require('./getModuleConfig')()
 ;
 
-module.exports = checkParameters;
+module.exports = checkSecretParameters;
 
 
 // Check if parameters and dist parameters are keys iso
-function checkParameters (parametersPath) {
-  parametersPath = parametersPath || path.join(moduleConfig.DEFAULT_PATH, moduleConfig.SECRET_PARAMETERS_FILE);
-  const distParametersPath = parametersPath + '.dist';
+function checkSecretParameters (parametersPath) {
 
+  const distParametersPath = parametersPath + '.dist';
 
   let distParameters,
       parameters

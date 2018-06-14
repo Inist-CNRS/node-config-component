@@ -22,7 +22,7 @@ const basicConfig = {
   parameters: {'TMP_PATH': '/path/to/tmp'}
 };
 
-describe('loadSync([file = defaultPath])', () => {
+describe('loadSync(file)', () => {
   it('Should load and compile to json yaml file', () => {
     const config         = loadSync(path.join(__dirname, '/config/configBasic.yml')),
           expectedConfig = _.cloneDeep(basicConfig)
@@ -99,6 +99,7 @@ describe('loadSync([file = defaultPath])', () => {
     });
 
   });
+
   it('Should throw on circular imports', () => {
     should.throws(() => {loadSync(path.join(__dirname, '/config/configWithCircularImports.yml'));});
   });
