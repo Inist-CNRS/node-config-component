@@ -100,7 +100,7 @@ function _import (file) {
   // How do we handle file by type
   const mapping = {
     '.json': fs.readJsonSync,
-    '.yml' : yaml.load.bind(yaml),
+    '.yml' : _loadYml,
     '.js' : require,
     '.node': require
   };
@@ -116,6 +116,10 @@ function _import (file) {
   if (result instanceof Error) throw result;
 
   return result;
+}
+
+function _loadYml(file){
+  return yaml.parse(fs.readFileSync(file, {encoding:'utf8'}));
 }
 
 function importCircularReferenceException (importedYamlFile, yamlFile) {
