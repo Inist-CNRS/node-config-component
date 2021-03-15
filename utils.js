@@ -1,6 +1,6 @@
 'use strict';
-const path         = require('path'),
-      fs           = require('fs')
+const path = require('path'),
+      fs   = require('fs')
 ;
 
 const utils = {};
@@ -15,25 +15,30 @@ utils.getProductionPathFrom = getProductionPathFrom;
 utils.resolve = resolve;
 
 function isNodeEnvSet () {
-  return !!(process.env.hasOwnProperty('NODE_ENV') && process.env.NODE_ENV.replace(/\s/g, '').length);
+    return !!(process.env.hasOwnProperty('NODE_ENV') && process.env.NODE_ENV.replace(/\s/g, '').length);
 }
 
 function basename () {
-  return `config_${getEnv()}.yml`;
+    return `config_${getEnv()}.yml`;
 }
 
 function getEnv () {
-  if (!isNodeEnvSet()) return 'production';
+    if (!isNodeEnvSet()) return 'production';
 
-  return process.env.NODE_ENV;
+    return process.env.NODE_ENV;
 }
 
 function getProductionPathFrom (fromFilePath) {
-  return path.join(resolve(fromFilePath), 'config_production.yml');
+    return path.join(resolve(fromFilePath), 'config_production.yml');
 }
 
 function getEnvPathFrom (fromFilePath) {
-  return path.join(resolve(fromFilePath), basename());
+    const configDirPath = resolve(fromFilePath);
+    const parentModulePath = path.resolve(configDirPath, '../../');
+    if (path.basename(parentModulePath) === 'node_modules' && fs.statSync(parentModulePath, {throwIfNoEntry: false})) {
+        return path.join(configDirPath, 'config_production.yml');
+    }
+    return path.join(configDirPath, basename());
 }
 
 /**
@@ -42,43 +47,43 @@ function getEnvPathFrom (fromFilePath) {
  * @returns String path
  */
 function resolve (fromFilePath) {
-  const fileStat = fs.statSync(fromFilePath);
-  fromFilePath = fileStat.isFile() ? path.dirname(fromFilePath) : fromFilePath;
-  
-  const packageDir = _resolve(fromFilePath),
-        configDir  = path.join(packageDir, 'config')
-  ;
+    const fileStat = fs.statSync(fromFilePath);
+    fromFilePath = fileStat.isFile() ? path.dirname(fromFilePath) : fromFilePath;
 
-  try {
-    fs.readdirSync(configDir);
-  } catch (err) {
-    if (err.code === 'ENOENT') throw configDirNotFoundException(fromFilePath);
-    throw err;
-  }
+    const packageDir = _resolve(fromFilePath),
+          configDir  = path.join(packageDir, 'config')
+    ;
 
-  return configDir;
-
-  // package.json resolver
-  function _resolve (dirPath) {
-    _resolve.i = _resolve.i || 0;
-    if (fs.existsSync(path.join(dirPath, 'package.json'))) {
-      return dirPath;
+    try {
+        fs.readdirSync(configDir);
+    } catch (err) {
+        if (err.code === 'ENOENT') throw configDirNotFoundException(fromFilePath);
+        throw err;
     }
-    if (dirPath === '/' || _resolve.i === 16) throw packageNotFoundException(fromFilePath);
-    ++_resolve.i;
-    return _resolve(path.dirname(dirPath));
-  }
+
+    return configDir;
+
+    // package.json resolver
+    function _resolve (dirPath) {
+        _resolve.i = _resolve.i || 0;
+        if (fs.existsSync(path.join(dirPath, 'package.json'))) {
+            return dirPath;
+        }
+        if (dirPath === '/' || _resolve.i === 16) throw packageNotFoundException(fromFilePath);
+        ++_resolve.i;
+        return _resolve(path.dirname(dirPath));
+    }
 }
 
 function configDirNotFoundException (filename) {
-  let err = new Error(`No config dir for module ${filename}`);
-  err.name = 'configDirNotFoundException';
-  return err;
+    let err = new Error(`No config dir for module ${filename}`);
+    err.name = 'configDirNotFoundException';
+    return err;
 }
 
 function packageNotFoundException (filename) {
-  let err = new Error(`No package path for module ${filename}`);
-  err.name = 'packageNotFoundException';
-  return err;
+    let err = new Error(`No package path for module ${filename}`);
+    err.name = 'packageNotFoundException';
+    return err;
 }
 

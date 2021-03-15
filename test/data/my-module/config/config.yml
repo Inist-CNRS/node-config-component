@@ -1,0 +1,12 @@
+%YAML 1.2
+---
+parameters:
+  TMP_PATH: /path/to/tmp
+
+imports:
+  - resource: ../package.json
+    pick:
+      name: app.name
+      version: app.version
+      mode: default
+
