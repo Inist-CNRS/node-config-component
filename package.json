@@ -31,7 +31,7 @@
   "homepage": "https://github.com/Inist-CNRS/node-config-component#readme",
   "dependencies": {
     "fs-extra": "^5.0.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
