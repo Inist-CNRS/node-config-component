@@ -1,14 +1,14 @@
 {
   "name": "config-component",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "YAML config component for nodeJs",
   "main": "index.js",
   "scripts": {
     "test": "export NODE_ENV='test'; mocha"
   },
   "bin": {
-    "view-config": "./bin/view-config.js",
-    "install-config": "./bin/install-config.js"
+    "view-config": "bin/view-config.js",
+    "install-config": "bin/install-config.js"
   },
   "repository": {
     "type": "git",
