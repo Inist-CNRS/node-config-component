@@ -79,8 +79,7 @@ describe('loadSync(file)', () => {
           expectedConfig = _.cloneDeep(basicConfig)
     ;
 
-    expectedConfig.app.name = 'config-component';
-    expectedConfig.app.version = '1.0.0';
+    expectedConfig.app.name = '@istex/config-component';
     expectedConfig.repository = {type: 'git'};
     expectedConfig.parameters.license = 'MIT';
 

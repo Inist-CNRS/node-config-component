@@ -46,7 +46,6 @@ function _getFullConfig (module) {
     fileEnv = utils.getEnv();
     config = configComponent.loadSync(filePath);
   } catch (err) {
-console.log(err)
     if (err.code !== 'ENOENT' || fileEnv === 'production') {
       // Unexpected Error or production config not found.
       throw err;

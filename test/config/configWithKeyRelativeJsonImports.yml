@@ -5,7 +5,6 @@ imports:
   - resource: ../../package.json
     pick:
       name: app.name
-      version: app.version
       app.baseUrl:
       repository.type:
       foo:
