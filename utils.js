@@ -1,6 +1,7 @@
 'use strict';
 const path = require('path'),
-      fs   = require('fs')
+      fs   = require('fs'),
+      _    = require('lodash')
 ;
 
 const utils = {};
@@ -8,37 +9,42 @@ const utils = {};
 module.exports = utils;
 
 utils.isNodeEnvSet = isNodeEnvSet;
-utils.getEnv = getEnv;
+utils.getEnv = _.memoize(getEnv);
 utils.basename = basename;
 utils.getEnvPathFrom = getEnvPathFrom;
 utils.getProductionPathFrom = getProductionPathFrom;
-utils.resolve = resolve;
+utils.resolve = _.memoize(resolve);
 
 function isNodeEnvSet () {
     return !!(process.env.hasOwnProperty('NODE_ENV') && process.env.NODE_ENV.replace(/\s/g, '').length);
 }
 
-function basename () {
-    return `config_${getEnv()}.yml`;
+function basename (fromFilePath) {
+    return `config_${utils.getEnv(fromFilePath)}.yml`;
 }
 
-function getEnv () {
-    if (!isNodeEnvSet()) return 'production';
+function getEnv (fromFilePath) {
+    if (!isNodeEnvSet() || _isFileInSubModule(fromFilePath)) return 'production';
 
     return process.env.NODE_ENV;
 }
 
+function _isFileInSubModule (fromFilePath) {
+
+    const configDirPath = utils.resolve(fromFilePath);
+    const parentModulePath = path.resolve(configDirPath, '../../');
+
+    return path.basename(parentModulePath) === 'node_modules' && !!fs.statSync(parentModulePath,
+                                                                               {throwIfNoEntry: false});
+}
+
 function getProductionPathFrom (fromFilePath) {
-    return path.join(resolve(fromFilePath), 'config_production.yml');
+    return path.join(utils.resolve(fromFilePath), 'config_production.yml');
 }
 
 function getEnvPathFrom (fromFilePath) {
-    const configDirPath = resolve(fromFilePath);
-    const parentModulePath = path.resolve(configDirPath, '../../');
-    if (path.basename(parentModulePath) === 'node_modules' && fs.statSync(parentModulePath, {throwIfNoEntry: false})) {
-        return path.join(configDirPath, 'config_production.yml');
-    }
-    return path.join(configDirPath, basename());
+    const configDirPath = utils.resolve(fromFilePath);
+    return path.join(configDirPath, basename(fromFilePath));
 }
 
 /**

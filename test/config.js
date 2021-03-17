@@ -35,8 +35,8 @@ describe('config#get(moduleOrPath)', () => {
                 process.env.NODE_ENV.should.equal('test');
                 config.should.deepEqual({
                                             app: {
-                                                name: 'my-module',
-                                                version        : '0.0.1',
+                                                name: 'my-sub-module',
+                                                version        : '0.0.618',
                                                 mode: 'production'
                                             }
                                         });
