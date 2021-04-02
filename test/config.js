@@ -41,6 +41,20 @@ describe('config#get(moduleOrPath)', () => {
                                             }
                                         });
             });
+
+    it('Should return "config_production" and ignore the env variable "NODE_ENV" if the module is in /node_modules/**',
+       () => {
+           const config = require('./data/node_modules/@foo/my-module/index.js');
+
+           process.env.NODE_ENV.should.equal('test');
+           config.should.deepEqual({
+                                       app: {
+                                           name: 'my-sub-module',
+                                           version        : '0.0.618',
+                                           mode: 'production'
+                                       }
+                                   });
+       });
 });
 
 

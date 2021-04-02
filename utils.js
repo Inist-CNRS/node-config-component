@@ -34,8 +34,7 @@ function _isFileInSubModule (fromFilePath) {
     const configDirPath = utils.resolve(fromFilePath);
     const parentModulePath = path.resolve(configDirPath, '../../');
 
-    return path.basename(parentModulePath) === 'node_modules' && !!fs.statSync(parentModulePath,
-                                                                               {throwIfNoEntry: false});
+    return parentModulePath.split(path.sep).includes('node_modules');
 }
 
 function getProductionPathFrom (fromFilePath) {
