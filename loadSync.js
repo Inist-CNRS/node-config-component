@@ -110,12 +110,8 @@ function _import (file) {
   if (path.extname(file) === '') {
     file = file + '.yml';
   }
-
-  const result = _.attempt(func, file);
-
-  if (result instanceof Error) throw result;
-
-  return result;
+    
+  return func(file);
 }
 
 function _loadYml(file){
