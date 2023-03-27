@@ -66,7 +66,7 @@ function fillPlaceholder (config) {
         && !process.env.hasOwnProperty(parameterName)
         || !envMatch
       )
-      && !(parameters && parameters.hasOwnProperty(parameterName))
+      && !(parameters && _.has(parameters,parameterName))
     ) {
       throw missingParameterException(parameterName, key);
     }
@@ -80,7 +80,7 @@ function fillPlaceholder (config) {
 
     if (envMatch) env[parameterName] = 'UNSET';
 
-    return parameters[parameterName];
+    return _.get(parameters,parameterName);
   }
 
 }
