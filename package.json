@@ -21,7 +21,7 @@
     "javascript"
   ],
   "engines": {
-    "node": ">=0.8"
+    "node": ">=12"
   },
   "author": "jj618",
   "license": "MIT",
