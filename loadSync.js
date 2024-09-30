@@ -26,6 +26,18 @@ function loadSync (file) {
 
   return config;
 
+  function resolveYamlImport(yamlFile, {optional = false}){
+    try{
+      return resolveYamlImportSync(yamlFile);
+    } catch(err){
+      if(optional === true && ['ENOENT', 'MODULE_NOT_FOUND'].includes(err.code)){
+        console.warn('ConfigComponent: Skipped import of ' + yamlFile);
+        return {};
+      }
+      throw err;
+    }
+  }
+
   function resolveYamlImportSync (yamlFile)/* use (resolvedImports)*/ {
     let json,
         dirname = path.dirname(yamlFile)
@@ -64,7 +76,7 @@ function loadSync (file) {
           throw importCircularReferenceException(resource, yamlFile);
         }
 
-        resolvedYamlImport = resolveYamlImportSync(resource);
+        resolvedYamlImport = resolveYamlImport(resource, {optional: jsonImport.optional});
         if (!_.has(jsonImport, 'pick')) return resolvedYamlImport;
 
         return _.chain(jsonImport)
@@ -110,7 +122,7 @@ function _import (file) {
   if (path.extname(file) === '') {
     file = file + '.yml';
   }
-    
+
   return func(file);
 }
 

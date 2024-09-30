@@ -38,6 +38,13 @@ describe('loadSync(file)', () => {
     config.should.deepEqual(expectedConfig);
   });
 
+  it('Should ignore missing file if tagged as {optional: true}', () => {
+    const config         = loadSync(path.join(__dirname, '/config/configWithOptionalImports.yml')),
+      expectedConfig = { env: {} }
+    ;
+    config.should.deepEqual(expectedConfig);
+  });
+
   it('Imported file should cascade, later property win', () => {
     const config         = loadSync(path.join(__dirname, '/config/configWithCascade.yml')),
           expectedConfig = _.cloneDeep(basicConfig)

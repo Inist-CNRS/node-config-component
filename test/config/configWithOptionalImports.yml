@@ -1,0 +1,5 @@
+%YAML 1.2
+---
+imports:
+  - resource: missingConfig # Must not throw for missing file
+    optional: true
