@@ -93,6 +93,31 @@ describe('loadSync(file)', () => {
     config.should.deepEqual(expectedConfig);
   });
 
+  it('Should resolve wildcard cherry picking imports', () => {
+    const config         = loadSync(path.join(__dirname, '/config/configWithWildcardPick.yml'))
+    ;
+    config.should.deepEqual({
+        parameters: { TMP_PATH: '/path/to/tmp' },
+        wildcard: {
+          app: {
+            name: 'myApp',
+            baseUrl: 'https://myapp.com',
+            rootPath: '/home/app',
+            stackTraceLimit: 10
+          },
+          security: {
+            jwt: { key: 'aFalseKey' },
+            ldap: { url: 'https://ldapUrl', pass: 'secretPass' }
+          },
+          elastic: {
+            clients: { main: { log: ['error', 'trace', 'debug'] } }
+          }
+        },
+        env: {}
+      }
+    );
+  });
+
   describe('[file = *.js]', () => {
     it('Should import js module that exports litteral Object', () => {
       const config         = loadSync(path.join(__dirname, '/config/configWithJsImports.yml')),

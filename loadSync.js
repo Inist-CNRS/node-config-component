@@ -80,18 +80,24 @@ function loadSync (file) {
         if (!_.has(jsonImport, 'pick')) return resolvedYamlImport;
 
         return _.chain(jsonImport)
-                .get('pick', {})
-                .transform((accu, destinationPath, sourcePath) => {
-                             if (!_.has(resolvedYamlImport, sourcePath)) return;
-                             if (_.isNil(destinationPath)) {destinationPath = sourcePath;}
-                             const get = _.get(resolvedYamlImport, sourcePath);
-                             const set = destinationPath;
+          .get('pick', {})
+          .transform((accu, destinationPath, sourcePath) => {
+              if (sourcePath === '*') {
+                _.assign(accu, _.pick(resolvedYamlImport, 'parameters'));
+                if (_.isNil(destinationPath)) {_.assign(accu, _.omit(resolvedYamlImport, 'parameters')); return;}
+                _.set(accu, destinationPath, _.omit(resolvedYamlImport, 'parameters'));
+                return;
+              }
+              if (!_.has(resolvedYamlImport, sourcePath)) return;
+              if (_.isNil(destinationPath)) {destinationPath = sourcePath;}
+              const get = _.get(resolvedYamlImport, sourcePath);
+              const set = destinationPath;
 
-                             _.set(accu, set, get);
-                           },
-                           {}
-                )
-                .value();
+              _.set(accu, set, get);
+            },
+            {}
+          )
+          .value();
       }
     );
 
