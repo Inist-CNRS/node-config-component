@@ -30,6 +30,8 @@
   },
   "homepage": "https://github.com/Inist-CNRS/node-config-component#readme",
   "dependencies": {
+    "command-line-args": "^6.0.0",
+    "dtrim": "^1.12.0",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "yamljs": "^0.3.0"
