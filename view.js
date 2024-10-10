@@ -2,7 +2,7 @@
 
 const yaml = require('yamljs'),
   _ = require('lodash'),
-  path = require('path'),
+  { basename } = require('path'),
   dtrim = require('dtrim')
 ;
 
@@ -23,7 +23,7 @@ const
 
 module.exports = view;
 
-function view ({ trimDepth = 5,  inlineDepth = 4,  indent = 4, size }) {
+function view ({ trimDepth , inlineDepth = 4, indent = 3, size, path }) {
   const json = configComponent._getFullConfig({ filename: process.cwd() });
 
   _.defaults(json, { env: {}, parameters: {} });
@@ -51,9 +51,9 @@ function view ({ trimDepth = 5,  inlineDepth = 4,  indent = 4, size }) {
     depth: trimDepth,
     size
   });
-
+  const configFragment = path != null ? _.get(config, path) : config;
   let
-    yamlConfig = yaml.dump(trim(config), inlineDepth, indent),
+    yamlConfig = yaml.dump(trim(configFragment), inlineDepth, indent),
     yamlParameters = yaml.dump(parameters, inlineDepth, indent),
     yamlEnv = yaml.dump(env, inlineDepth, indent)
   ;
@@ -66,19 +66,23 @@ function view ({ trimDepth = 5,  inlineDepth = 4,  indent = 4, size }) {
   console.info(prettify(yamlEnv));
   console.info(prettify(yamlParameters));
   console.info(envStyle('---', yellow));
-  console.info(envStyle(`config:`, yellow, { bold: true }) + envStyle(`(${path.basename(json.filePath)})`,
+  console.info(envStyle(`config:`, yellow, { bold: true }) + envStyle(`(${basename(json.filePath)})`,
     violet,
     { bold: true }));
-  console.info(_indent(_.isEmpty(config) ? 'Empty configuration' : prettify(yamlConfig), indent));
+
+  if (path != null) {
+    console.info(_indent(envStyle(path, yellow, { bold: true }), indent) + ':');
+  }
+  console.info(_indent(_.isEmpty(configFragment) ? 'Empty configuration' : prettify(yamlConfig),
+    path != null ? indent * 2 : indent));
   console.info(envStyle('---', yellow));
 }
 
 function prettify (yamlString) {
   return yamlString
-
     .replace(/^()(?!parameters|env)([^\s{].*?)(:\s)/gm,
       `$1${envStyle('$2', yellow, { bold: true })}$3`) // first level keys
-    .replace(/^(\u0020+)([^ ].*?)(:\s)/gm, `$1${envStyle('$2', blue)}$3`) // nested keys
+    .replace(/^(\u0020+)([^ -].*?)(:\s)(?!\S+)/gm, `$1${envStyle('$2', blue)}$3`) // nested keys
     .replace(/^()(parameters)(:\s)/gm, `$1${envStyle('$2', orange, { bold: true })}$3`) //  parameters key
     .replace(/^()(env)(:\s)/gm, `$1${envStyle('$2', green, { bold: true })}$3`) // env key
     .replace(/(?!:\s)(UNSET)$/gm, envStyle('$1', grey)) // Unset flag

@@ -6,6 +6,8 @@ const options = commandLineArgs([
   { name: 'inline-depth', alias: 'l', type: Number},
   { name: 'indent', alias: 'i', type: Number},
   { name: 'size', alias: 's', type: Number},
+  { name: 'path', alias: 'p', type: String},
+
 
 ], {
   camelCase: true
