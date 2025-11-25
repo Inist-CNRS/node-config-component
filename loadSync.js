@@ -120,7 +120,9 @@ function _import (file) {
     '.json': fs.readJsonSync,
     '.yml' : _loadYml,
     '.js' : require,
-    '.node': require
+    '.node': require,
+    '.cjs': require,
+    '.mjs': require,
   };
 
   const func = _.get(mapping, path.extname(file), mapping['.yml']);
